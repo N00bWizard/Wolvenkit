@@ -58,27 +58,33 @@
                     <ToolBar  Band="0" Style="{StaticResource ToolBarBaseStyle}" Padding="6">
                         <Menu Background="Transparent" VerticalAlignment="Center">
                             <MenuItem Header="View">
+                                <MenuItem IsCheckable="true" Header="Details">
+                                </MenuItem>
+                                <MenuItem IsCheckable="true" Header="LargeIcon">
+                                </MenuItem>
+                                <MenuItem IsCheckable="true" Header="List">
+                                </MenuItem>
+                                <MenuItem IsCheckable="true" Header="SmallIcon">
+                                </MenuItem>
+                                <MenuItem IsCheckable="true" Header="Tile">
+                                </MenuItem>
+                            </MenuItem>
+                            <MenuItem IsEnabled="False" Header="Edit">
+                                <MenuItem Header="Empty">
+                                </MenuItem>
                                 <MenuItem Header="Empty">
                                 </MenuItem>
                                 <MenuItem Header="Empty">
                                 </MenuItem>
                             </MenuItem>
-                            <MenuItem Header="Edit">
-                                <MenuItem Header="Empty">
-                                </MenuItem>
-                                <MenuItem Header="Empty">
-                                </MenuItem>
-                                <MenuItem Header="Empty">
-                                </MenuItem>
-                            </MenuItem>
-                            <MenuItem Header="Bookmarks"/>
-                            <MenuItem Header="Tabs"/>
+                            <MenuItem IsEnabled="False" Header="Bookmarks"/>
+                            <MenuItem IsEnabled="False" Header="Tabs"/>
                         </Menu>
                     </ToolBar>
 
                     <ToolBar Band="0" Style="{StaticResource ToolBarBaseStyle}" Padding="6">
                         <Menu Background="Transparent" VerticalAlignment="Center">
-                            <Button Style="{StaticResource ButtonIcon}" Width="40" hc:IconElement.Geometry="{DynamicResource GlobalLeftArrow}" Background="Transparent" BorderBrush="{x:Null}">
+                            <Button IsEnabled="False" Style="{StaticResource ButtonIcon}" Width="40" hc:IconElement.Geometry="{DynamicResource GlobalLeftArrow}" Background="Transparent" BorderBrush="{x:Null}">
                             </Button>
                             <Button  Style="{StaticResource ButtonIcon}" Width="40" hc:IconElement.Geometry="{DynamicResource AssetBrowserHome}" Background="Transparent" BorderBrush="{x:Null}" Click="ButtonBase_OnClick" RenderTransformOrigin="0.5,0.5">
                                 <Button.RenderTransform>

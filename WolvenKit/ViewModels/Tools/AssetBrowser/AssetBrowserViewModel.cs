@@ -1,4 +1,4 @@
-﻿using Catel.MVVM;
+using Catel.MVVM;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -8,8 +8,10 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Forms;
 using Catel.IoC;
 using CP77.CR2W.Types;
+using Orc.Notifications;
 using Orc.ProjectManagement;
 using ProtoBuf.Meta;
 using WolvenKit.Common;
@@ -30,6 +32,11 @@ namespace WolvenKit.ViewModels.AssetBrowser
         public string SelectedExtension { get; set; }
         public List<string> Classes { get; set; }
         public string SelectedClass { get; set; }
+        public GridLength PreviewWidth { get; set; }
+        public bool PreviewVisible { get; set; }
+        public AssetBrowserData SelectedNode { get; set; }
+        public List<AssetBrowserData> SelectedNodes { get; set; }
+        public View ShowMode { get; set; }
 
         public AssetBrowserViewModel(List<IGameArchiveManager> managers, List<string> AvaliableClasses)
         {
@@ -52,6 +59,9 @@ namespace WolvenKit.ViewModels.AssetBrowser
             this.RootNode = this.CurrentNode;
             this.Extensions = managers.SelectMany(x => x.Extensions).ToList();
             this.Classes = AvaliableClasses;
+            this.PreviewWidth = new GridLength(0, GridUnitType.Pixel);
+            this.PreviewVisible = false;
+            this.ShowMode = View.Details;
         }
 
         public void PerformSearch(string query)
@@ -87,7 +97,11 @@ namespace WolvenKit.ViewModels.AssetBrowser
                 case EntryType.File:
                 {
                     Task.Run(new Action(() => AddToMod(item.This.Files.First(x => x.Key == item.Name).Value.First())));
-                    MessageBox.Show( "Importing file: " + item.Name, "File import");
+                    var nf = new Notification();
+                    nf.Title = "Importing file";
+                    nf.Message = item.Name;
+                    nf.Level = NotificationLevel.Info;
+                    ServiceLocator.Default.ResolveType<INotificationService>().ShowNotification(nf);
                     break;
                 }
                 case EntryType.MoveUP:
@@ -142,10 +156,13 @@ namespace WolvenKit.ViewModels.AssetBrowser
             var ret = new Dictionary<string, IGameFile>();
             foreach (var f in root.FileList)
             {
-                if (f.Name.ToUpper().Contains(searchkeyword.ToUpper()))
+                if (f.Name != null)
                 {
-                    if(!ret.ContainsKey(f.Name))
-                        ret.TryAdd(f.Name, f);
+                    if (Path.GetFileNameWithoutExtension(f.Name).ToUpper().Contains(searchkeyword.ToUpper()))
+                    {
+                        if (!ret.ContainsKey(f.Name))
+                            ret.TryAdd(f.Name, f);
+                    }
                 }
             }
             return ret.Values.ToList();
